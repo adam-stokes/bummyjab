@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Streamline your build system with vagrant + sbuild
-date: 2013-07-18
+date: 2013-07-18 21:21 EDT
 tags:
 - ubuntu
 - linux
@@ -46,9 +46,9 @@ Install [vagrant](http://downloads.vagrantup.com/)
 Install vagrant-sbuild
 
 ```bash
-$ git clone git://github.com:battlemidget/vagrant-sbuild.git 
-$ cd vagrant-sbuild 
-$ git submodule init 
+$ git clone git://github.com:battlemidget/vagrant-sbuild.git
+$ cd vagrant-sbuild
+$ git submodule init
 $ git submodule update
 ```
 

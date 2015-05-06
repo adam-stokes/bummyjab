@@ -6,7 +6,7 @@ tags: [ubuntu, juju]
 template: single.hbs
 ---
 
-This is a quick introduction on extending Juju with plugins. What we'll cover:
+This is a quick introduction on extending Juju with plugins written in Go. What we'll cover:
 
 * Setting up your Go environment
 * Getting the Juju source code

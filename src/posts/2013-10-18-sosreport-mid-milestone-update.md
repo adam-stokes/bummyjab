@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'sosreport: mid-milestone update'
-date: 2013-10-18
+date: 2013-10-18 21:00 EDT
 tags:
 - ubuntu
 - python
