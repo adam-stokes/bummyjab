@@ -1,0 +1,8 @@
+{{> header}}
+<div class="col-md-8">
+  {{#each collections.posts}}
+    <p><a href="{{link this.path}}">{{this.title}}</a></p>
+  {{/each}}
+</div>
+
+{{> sidebar}}

@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+ //
+// meta-gen: updates posts map
+
+'use strict';
+
+var fm = require('fastmatter');
+var fs = require('fs');
+var _ = require('lodash');
+
+var posts = fs.readdirSync('src/posts');
+_.each(posts, function(post) {
+  var input = fs.readFileSync('src/posts/'+post);
+  console.log(fm(input.toString()));
+});
+console.log(posts);

@@ -1,0 +1,19 @@
+{{> header }}
+<div class="col-md-8">
+  <article class="entry post">
+    <header class="post__header">
+      <div class="post__header__wrapper">
+        <h1 class="entry-title page-header">{{ title }}
+        </h1>
+        <small>Published on
+          <date class="date">{{date date }}</date>
+        </small>
+
+      </div>
+    </header>
+    <div class="entry-content">
+      {{{ contents }}}
+    </div>
+  </article>
+</div>
+{{> sidebar}}
