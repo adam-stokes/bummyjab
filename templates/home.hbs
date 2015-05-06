@@ -1,7 +1,17 @@
 {{> header}}
 <div class="col-md-8">
+  <h1 class="page-header">Adam Stokes</h1>
   {{#each posts}}
-    <p><a href="{{link this.path}}">{{this.attributes.title}}</a></p>
+    <div class="row">
+      <div class="col-md-3">
+        <date>
+          {{date this.attributes.date}}
+        </date>
+      </div>
+      <div class="col-md-9">
+        <a href="{{link this.path}}">{{this.attributes.title}}</a>
+      </div>
+    </div>
   {{/each}}
 </div>
 
