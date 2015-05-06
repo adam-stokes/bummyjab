@@ -3,16 +3,16 @@
   <article class="entry post">
     <header class="post__header">
       <div class="post__header__wrapper">
-        <h1 class="entry-title page-header">{{ title }}
+        <h1 class="entry-title page-header">{{ attrs.title }}
         </h1>
         <small>Published on
-          <date class="date">{{date date }}</date>
+          <date class="date">{{date attrs.date }}</date>
         </small>
 
       </div>
     </header>
     <div class="entry-content">
-      {{{ contents }}}
+      {{{ body }}}
     </div>
   </article>
 </div>

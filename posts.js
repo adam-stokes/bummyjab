@@ -3,19 +3,23 @@ var fs = require('fs');
 var fm = require('fastmatter');
 
 function parseFM(post) {
-  fs.readFile('src/posts/' + post, function (error, item) {
-    var matter = fm(item.toString());
-    console.log('frontmatter: ' + matter.attributes.title);
-    return matter;
-  });
+  var item = fs.readFileSync('src/posts/' + post);
+  var matter = fm(item.toString());
+  return matter;
 }
 
-function loadPosts() {
+exports.templates = {
+  singlePage: fs.readFileSync(__dirname + '/templates/single.hbs')
+    .toString(),
+  indexPage: fs.readFileSync(__dirname + '/templates/home.hbs')
+    .toString()
+};
+
+exports.loadPosts = function (callback) {
   fs.readdir('src/posts', function (err, posts) {
     _.each(posts, function (post) {
-      parseFM(post);
+      var matter = parseFM(post);
+      callback(null, post, matter);
     });
   });
-}
-
-exports.allPosts = loadPosts;
+};

@@ -1,6 +1,8 @@
 var _ = require('lodash');
 var fs = require('fs');
+var path = require('path');
 var fm = require('fastmatter');
+var async = require('async');
 var handlebars = require('handlebars');
 var markdown = require('marked');
 var hljs = require('highlight.js');
@@ -8,7 +10,6 @@ var moment = require('moment');
 var wagner = require('wagner-core');
 var metadata = require('./config')(process.argv);
 var posts = require('./posts');
-
 
 markdown.setOptions({
   highlight: function (code) {
@@ -42,20 +43,34 @@ handlebars.registerHelper('link', function (path) {
   return metadata.baseUrl + '/' + path;
 });
 
-wagner.task('generatePosts', function (callback) {
-  console.log('Generating posts');
-  wagner.parallel(
-    posts.allPosts,
-    function (post, callback) {
-      console.log('Generating "' + post.attributes.title + "'");
+async.waterfall([
+    function (callback) {
+      console.log('Generating posts.');
+      posts.loadPosts(function (err, post, matter) {
+        callback(null, post, matter);
+      });
     },
-    callback
-  );
-});
-
-wagner.invokeAsync(function (error, generatePosts) {
-  if (error) {
-    return console.log('Errors: ' + error + '\n' + error.stack);
-  }
-  console.log('Done');
-});
+    function (post, matter, callback) {
+      var template = handlebars.compile(posts.templates.singlePage);
+      var post_ctx = {
+        attrs: matter.attributes,
+        body: markdown(matter.body)
+      };
+      var html = template(post_ctx);
+      callback(null, post, html);
+    },
+    function (post, html, callback) {
+      var bn = path.basename(post, '.md');
+      fs.writeFile('/tmp/' + bn + '.html', html, function (err) {
+        if (err) {
+          callback(err);
+        }
+        callback(null);
+      });
+    }
+  ],
+  function (err, results) {
+    if (err) {
+      console.log('Error: ' + err);
+    }
+  });
