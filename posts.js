@@ -5,6 +5,8 @@ var markdown = require('marked');
 var hljs = require('highlight.js');
 var path = require('path');
 var mkdirp = require('mkdirp');
+var metadata = require('./config');
+var utils = require('./utils');
 
 markdown.setOptions({
   highlight: function (code) {
@@ -17,21 +19,15 @@ var templates = {
   singlePage: fs.readFileSync(__dirname + '/templates/single.hbs')
     .toString(),
   indexPage: fs.readFileSync(__dirname + '/templates/home.hbs')
+    .toString(),
+  feedPage: fs.readFileSync(__dirname + '/templates/feed.hbs')
     .toString()
 };
-
-// returns post string w/o date
-function stringify(post) {
-  var bn = path.basename(post, '.md');
-  var stripDateRe = /^\d{4}-\d{2}-\d{2}-(.*)$/;
-  var res = bn.match(stripDateRe);
-  return res[1];
-}
 
 function parseFM(post) {
   var item = fs.readFileSync('src/posts/' + post);
   var matter = fm(item.toString());
-  matter.path = stringify(post);
+  matter.path = utils.stringify(post);
   matter.compiled = markdown(matter.body);
   return matter;
 }
@@ -39,41 +35,70 @@ function parseFM(post) {
 exports.loadPosts = function () {
   var compiledPosts = [];
   var posts = fs.readdirSync('src/posts');
-    _.each(posts, function (post) {
-      var matter = parseFM(post);
-      compiledPosts.push(matter);
-    });
+  _.each(posts, function (post) {
+    var matter = parseFM(post);
+    compiledPosts.push(matter);
+  });
   return compiledPosts;
 };
 
-exports.genIndex = function (handlebars, posts, callback) {
+exports.genIndex = function (posts, callback) {
   var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
-  var postList = {
-    posts: allPosts
-  };
-  var template = handlebars.compile(templates.indexPage);
-  var html = template(postList);
-  mkdirp('build', function (err) {
+  var html = utils.render({
+    posts: allPosts,
+    site: metadata
+  }, templates.indexPage);
+  var indexPath = path.join('build', 'index.html');
+  fs.writeFile(indexPath, html, function (err) {
     if (err) {
       callback(err);
     }
-    fs.writeFile(path.join('build', 'index.html'), html, function (err) {
-      if (err) {
-        callback(err);
-      }
-    });
   });
   callback(null);
 };
 
-exports.genPosts = function (handlebars, posts, callback) {
+exports.genFeed = function (posts, callback) {
+  var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
+  var html = utils.render({
+    posts: allPosts,
+    site: metadata,
+    feed: 'feed.xml'
+  }, templates.feedPage);
+  var feedPath = path.join('build', 'feed.xml');
+  fs.writeFile(feedPath, html, function (err) {
+    if (err) {
+      callback(err);
+    }
+  });
+  callback(null);
+};
+
+exports.genUbuntuFeed = function (posts, callback) {
+  var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
+  var filtered = _.filter(allPosts, function (item) {
+    return _.includes(item.attributes.tags, 'ubuntu');
+  });
+  var html = utils.render({
+    posts: filtered,
+    site: metadata,
+    feed: 'ubuntu-feed.xml'
+  }, templates.feedPage);
+  var feedPath = path.join('build', 'ubuntu-feed.xml');
+  fs.writeFile(feedPath, html, function (err) {
+    if (err) {
+      callback(err);
+    }
+  });
+  callback(null);
+};
+
+exports.genPosts = function (posts, callback) {
   _.each(posts, function (post) {
-    var template = handlebars.compile(templates.singlePage);
-    var post_ctx = {
+    var html = utils.render({
       attrs: post.attributes,
-      body: post.compiled
-    };
-    var html = template(post_ctx);
+      body: post.compiled,
+      site: metadata
+    }, templates.singlePage);
     var outputDir = path.join('build', post.path);
     mkdirp(outputDir, function (err) {
       if (err) {

@@ -2,13 +2,12 @@
 <div class="col-md-8">
   <article class="entry post">
     <header class="post__header">
-      <div class="post__header__wrapper">
-        <h1 class="entry-title page-header">{{ attrs.title }}
-        </h1>
+      <div class="page-header">
+        <h1>{{ attrs.title }}</h1>
         <small>Published on
           <date class="date">{{date attrs.date }}</date>
+          | tags: {{attrs.tags}}
         </small>
-
       </div>
     </header>
     <div class="entry-content">

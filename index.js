@@ -1,12 +1,11 @@
 var _ = require('lodash');
 var fs = require('fs');
-var path = require('path');
-var fm = require('fastmatter');
 var async = require('async');
 var handlebars = require('handlebars');
 var moment = require('moment');
-var metadata = require('./config')(process.argv);
+var metadata = require('./config');
 var posts = require('./posts');
+var mkdirp = require('mkdirp');
 
 var partials = ['header', 'footer', 'sidebar'];
 _.each(partials, function (partial) {
@@ -35,16 +34,30 @@ handlebars.registerHelper('link', function (path) {
 
 var items = posts.loadPosts();
 
+mkdirp('build', function (err) {
+  if (err) {
+    throw (err);
+  }
+});
+
 async.parallel([
   function (callback) {
-    console.log('Generating index');
-    posts.genIndex(handlebars, items, function (err) {
+    posts.genIndex(items, function (err) {
       callback(err);
     });
   },
   function (callback) {
-    console.log('Generating posts');
-    posts.genPosts(handlebars, items, function (err) {
+    posts.genFeed(items, function (err) {
+      callback(err);
+    });
+  },
+  function (callback) {
+    posts.genUbuntuFeed(items, function (err) {
+      callback(err);
+    });
+  },
+  function (callback) {
+    posts.genPosts(items, function (err) {
       callback(err);
     });
   }
