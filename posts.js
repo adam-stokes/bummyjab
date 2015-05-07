@@ -21,6 +21,8 @@ var templates = {
   indexPage: fs.readFileSync(__dirname + '/templates/home.hbs')
     .toString(),
   feedPage: fs.readFileSync(__dirname + '/templates/feed.hbs')
+    .toString(),
+  sitemapPage: fs.readFileSync(__dirname + '/templates/sitemap.hbs')
     .toString()
 };
 
@@ -84,6 +86,22 @@ exports.genUbuntuFeed = function (posts, callback) {
     feed: 'ubuntu-feed.xml'
   }, templates.feedPage);
   var feedPath = path.join('build', 'ubuntu-feed.xml');
+  fs.writeFile(feedPath, html, function (err) {
+    if (err) {
+      callback(err);
+    }
+  });
+  callback(null);
+};
+
+exports.genSitemap = function (posts, callback) {
+  var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
+  var html = utils.render({
+    posts: allPosts,
+    site: metadata,
+    feed: 'sitemap.xml'
+  }, templates.sitemapPage);
+  var feedPath = path.join('build', 'sitemap.xml');
   fs.writeFile(feedPath, html, function (err) {
     if (err) {
       callback(err);

@@ -38,9 +38,16 @@ gulp.task('concatJS', function () {
     .pipe(gulp.dest('build/js/'));
 });
 
+gulp.task('copyStatic', function () {
+  gulp.src('./src/fonts/*')
+    .pipe(gulp.dest('build/fonts'));
+  gulp.src('./src/images/*')
+    .pipe(gulp.dest('build/images'));
+});
+
 // requires index.js which starts the compile process
 gulp.task('compile', function () {
   require('./');
 });
 
-gulp.task('default', ['compile', 'less', 'concatCSS', 'concatJS']);
+gulp.task('default', ['compile', 'less', 'concatCSS', 'concatJS', 'copyStatic']);

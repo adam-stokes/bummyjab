@@ -8,7 +8,7 @@ date: '2005-07-25 00:00:59 -0400'
 date_gmt: '2005-07-25 00:00:59 -0400'
 categories:
 - What's New
-tags: []
+tags: [mutt, email]
 ---
 ### Place this in your ~/.muttrc
 
