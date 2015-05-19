@@ -45,22 +45,7 @@ async.map(process.argv.slice(2), function (item, callback) {
 }, function (err, items) {
   async.parallel([
     function (callback) {
-      posts.genIndex(items, function (err) {
-        callback(err);
-      });
-    },
-    function (callback) {
-      posts.genFeed(items, function (err) {
-        callback(err);
-      });
-    },
-    function (callback) {
-      posts.genUbuntuFeed(items, function (err) {
-        callback(err);
-      });
-    },
-    function (callback) {
-      posts.genSitemap(items, function (err) {
+      posts.genMaster(items, function (err) {
         callback(err);
       });
     },

@@ -34,70 +34,53 @@ exports.loadPosts = function (post, callback) {
   callback(null, matter);
 };
 
-exports.genIndex = function (posts, callback) {
-  var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
-  var html = utils.render({
-    posts: allPosts,
+exports.genMaster = function (posts, callback) {
+  var mapPosts = {
+    allPosts: _.sortByOrder(posts, ['attributes.date'], [false]),
+    filtered: _.filter(this.allPosts, function (item) {
+      return _.includes(item.attributes.tags, 'ubuntu');
+    })
+  };
+
+  var commonItems = {
+    posts: mapPosts.allPosts,
     site: metadata
-  }, templates.indexPage);
-  var indexPath = path.join('build', 'index.html');
-  fs.writeFile(indexPath, html, function (err) {
-    if (err) {
-      callback(err);
-    }
+  };
+  var postData = [{
+    html: utils.render({
+      posts: mapPosts.allPosts,
+      site: metadata
+    }, templates.indexPage),
+    page: 'index.html'
+  }, {
+    html: utils.render({
+      posts: mapPosts.allPosts,
+      site: metadata,
+      feed: 'feed.xml'
+    }, templates.feedPage),
+    page: 'feed.xml'
+  }, {
+    html: utils.render({
+      posts: mapPosts.filtered,
+      site: metadata,
+      feed: 'ubuntu-feed.xml'
+    }, templates.feedPage),
+    page: 'ubuntu-feed.xml'
+  }, {
+    html: utils.render({
+      posts: mapPosts.allPosts,
+      site: metadata,
+      feed: 'sitemap.xml'
+    }, templates.sitemapPage),
+    page: 'sitemap.xml'
+  }];
+  _.each(postData, function (item, callback) {
+    fs.writeFile(path.join('build', item.page), item.html, function (err) {
+      if (err) {
+        callback(err);
+      }
+    });
   });
-  callback(null);
-};
-
-exports.genFeed = function (posts, callback) {
-  var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
-  var html = utils.render({
-    posts: allPosts,
-    site: metadata,
-    feed: 'feed.xml'
-  }, templates.feedPage);
-  var feedPath = path.join('build', 'feed.xml');
-  fs.writeFile(feedPath, html, function (err) {
-    if (err) {
-      callback(err);
-    }
-  });
-  callback(null);
-};
-
-exports.genUbuntuFeed = function (posts, callback) {
-  var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
-  var filtered = _.filter(allPosts, function (item) {
-    return _.includes(item.attributes.tags, 'ubuntu');
-  });
-  var html = utils.render({
-    posts: filtered,
-    site: metadata,
-    feed: 'ubuntu-feed.xml'
-  }, templates.feedPage);
-  var feedPath = path.join('build', 'ubuntu-feed.xml');
-  fs.writeFile(feedPath, html, function (err) {
-    if (err) {
-      callback(err);
-    }
-  });
-  callback(null);
-};
-
-exports.genSitemap = function (posts, callback) {
-  var allPosts = _.sortByOrder(posts, ['attributes.date'], [false]);
-  var html = utils.render({
-    posts: allPosts,
-    site: metadata,
-    feed: 'sitemap.xml'
-  }, templates.sitemapPage);
-  var feedPath = path.join('build', 'sitemap.xml');
-  fs.writeFile(feedPath, html, function (err) {
-    if (err) {
-      callback(err);
-    }
-  });
-  callback(null);
 };
 
 exports.genPosts = function (posts, callback) {
