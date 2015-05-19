@@ -21,6 +21,3 @@ rsync -az src/images/* build/images/. &
 
 echo "Writing javascript files..."
 cat $jsItems > build/js/main.min.js
-
-echo "compiling blog"
-node index.js src/posts/*.md

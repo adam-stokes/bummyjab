@@ -7,20 +7,7 @@ async.map(process.argv.slice(2), function (item, callback) {
     callback(null, res);
   });
 }, function (err, items) {
-  async.parallel([
-    function (callback) {
-      posts.genMaster(items, function (err) {
-        callback(err);
-      });
-    },
-    function (callback) {
-      posts.genPosts(items, function (err) {
-        callback(err);
-      });
-    }
-  ], function (err, result) {
-    if (err) {
-      console.error(err);
-    }
+  posts.genMaster(items, function (err) {
+    callback(err);
   });
 });
