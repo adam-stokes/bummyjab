@@ -1,12 +1,9 @@
 ---
 layout: post
 title: Perl bindings for LeanKit.com
-date: 2014-10-07 15:38
+date: 2014-10-07T15:38Z
 featured: leankit.png
-tags:
-- api
-- json
-- rest
+tags: [api, json, rest]
 ---
 I recently released a Perl API client for LeanKit which covers the majority of exposed endpoints from the service.
 
