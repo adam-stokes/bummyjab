@@ -5,14 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "browser-sync start --files \"build/*, build/**/*\" --server build",
-    "build-less": "lessc src/styles/*.less --clean-css src/styles/main.css",
-    "build-css": "npm run build-less && cat bower_components/bootstrap/*/*/bootstrap.min.css bower_components/bootstrap/*/*/bootstrap-theme.min.css src/styles/main.css > build/styles/main.min.css",
-    "build-js": "cat bower_components/*/dist/jquery.js bower_components/*/dist/js/bootstrap.js > build/js/main.min.js",
-    "copy-static": "rsync -a src/fonts/* build/fonts/. & rsync -a src/images/* build/images/. &",
-    "build": "npm run build-css & npm run build-js& npm run copy-static&",
-    "precompile": "mkdir -p build/styles build/js build/fonts build/images",
-    "compile": "npm run build && node index.js"
+    "prestart": "bin/build-assets.zsh",
+    "start": "browser-sync start --files \"build/*, build/**/*\" --server build"
   },
   "repository": {
     "type": "git",
