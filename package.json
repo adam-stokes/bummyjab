@@ -25,6 +25,7 @@
     "clone": "^1.0.2",
     "fastmatter": "^1.0.0",
     "file": "^0.2.2",
+    "graceful-fs": "^3.0.7",
     "handlebars": "^3.0.3",
     "highlight.js": "^8.5.0",
     "is": "^3.0.1",
