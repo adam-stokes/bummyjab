@@ -2,9 +2,9 @@ var _ = require('lodash');
 var fs = require('fs');
 var fm = require('fastmatter');
 var markdown = require('marked');
+var mkdirp = require('mkdirp');
 var hljs = require('highlight.js');
 var path = require('path');
-var mkdirp = require('mkdirp');
 var metadata = require('./config');
 var utils = require('./utils');
 
@@ -26,22 +26,12 @@ var templates = {
     .toString()
 };
 
-function parseFM(post) {
-  var item = fs.readFileSync('src/posts/' + post);
-  var matter = fm(item.toString());
+exports.loadPosts = function (post, callback) {
+  var data = fs.readFileSync(post);
+  var matter = fm(data.toString());
   matter.path = utils.stringify(post);
   matter.compiled = markdown(matter.body);
-  return matter;
-}
-
-exports.loadPosts = function () {
-  var compiledPosts = [];
-  var posts = fs.readdirSync('src/posts');
-  _.each(posts, function (post) {
-    var matter = parseFM(post);
-    compiledPosts.push(matter);
-  });
-  return compiledPosts;
+  callback(null, matter);
 };
 
 exports.genIndex = function (posts, callback) {

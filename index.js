@@ -32,42 +32,46 @@ handlebars.registerHelper('link', function (path) {
   return metadata.baseUrl + '/' + path;
 });
 
-var items = posts.loadPosts();
-
 mkdirp('build', function (err) {
   if (err) {
     throw (err);
   }
 });
 
-async.parallel([
-  function (callback) {
-    posts.genIndex(items, function (err) {
-      callback(err);
-    });
-  },
-  function (callback) {
-    posts.genFeed(items, function (err) {
-      callback(err);
-    });
-  },
-  function (callback) {
-    posts.genSitemap(items, function (err) {
-      callback(err);
-    });
-  },
-  function (callback) {
-    posts.genUbuntuFeed(items, function (err) {
-      callback(err);
-    });
-  },
-  function (callback) {
-    posts.genPosts(items, function (err) {
-      callback(err);
-    });
-  }
-], function (err, callback) {
-  if (err) {
-    console.error(err);
-  }
+async.map(process.argv.slice(2), function (item, callback) {
+  posts.loadPosts(item, function (err, res) {
+    callback(null, res);
+  });
+}, function (err, items) {
+  async.parallel([
+    function (callback) {
+      posts.genIndex(items, function (err) {
+        callback(err);
+      });
+    },
+    function (callback) {
+      posts.genFeed(items, function (err) {
+        callback(err);
+      });
+    },
+    function (callback) {
+      posts.genUbuntuFeed(items, function (err) {
+        callback(err);
+      });
+    },
+    function (callback) {
+      posts.genSitemap(items, function (err) {
+        callback(err);
+      });
+    },
+    function (callback) {
+      posts.genPosts(items, function (err) {
+        callback(err);
+      });
+    }
+  ], function (err, result) {
+    if (err) {
+      console.error(err);
+    }
+  });
 });
