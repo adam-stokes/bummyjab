@@ -2,6 +2,7 @@
 
 ./bin/build-assets.zsh
 
+posts=(src/posts/*.md)
 echo "compiling blog"
-node index.js src/posts/*.md
-node ./bin/build-posts src/posts/*.md
+node ./bin/build-posts $posts &
+node ./bin/build-index $posts

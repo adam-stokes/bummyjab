@@ -1,8 +1,19 @@
-var fs = require('fs');
-var _ = require('lodash');
 var appRoot = require('app-root-path');
+
+var fs = require('fs');
+var path = require('path');
+var _ = require('lodash');
 var moment = require('moment');
 var handlebars = require('handlebars');
+var markdown = require('marked');
+var hljs = require('highlight.js');
+
+markdown.setOptions({
+  highlight: function (code) {
+    return hljs.highlightAuto(code)
+      .value;
+  }
+});
 
 var partials = ['header', 'footer', 'sidebar'];
 _.each(partials, function (partial) {
@@ -29,9 +40,22 @@ handlebars.registerHelper('link', function (path) {
   return config.baseUrl + '/' + path;
 });
 
+
+var templates = {
+  singlePage: fs.readFileSync(appRoot + '/templates/single.hbs')
+    .toString(),
+  indexPage: fs.readFileSync(appRoot + '/templates/home.hbs')
+    .toString(),
+  feedPage: fs.readFileSync(appRoot + '/templates/feed.hbs')
+    .toString(),
+  sitemapPage: fs.readFileSync(appRoot + '/templates/sitemap.hbs')
+    .toString()
+};
+
 module.exports = config = {
   'sitename': 'Adam Stokes',
   'title': 'steven seagal says hai.',
   'baseUrl': 'http://astokes.org',
-  'description': 'ir0n fists'
+  'description': 'ir0n fists',
+  templates: templates
 };

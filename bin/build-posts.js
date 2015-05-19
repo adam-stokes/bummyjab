@@ -1,39 +1,21 @@
 #!/usr/bin/env node
 
-var _ = require('lodash');
-var fs = require('fs');
-var fm = require('fastmatter');
-var markdown = require('marked');
-var mkdirp = require('mkdirp');
-var hljs = require('highlight.js');
-var path = require('path');
-var metadata = require('../config');
-var utils = require('../lib/utils');
 var appRoot = require('app-root-path');
-var moment = require('moment');
-var handlebars = require('handlebars');
-var posts = require('../lib/posts');
+var _ = require('lodash');
+var async = require('async');
+var fs = require('fs');
+var mkdirp = require('mkdirp');
+var path = require('path');
+var config = require('../config');
+var utils = require('../lib/utils');
 
-var templatePath = path.join(appRoot + '/templates');
-
-var templates = {
-  singlePage: fs.readFileSync(templatePath + '/single.hbs')
-    .toString(),
-  indexPage: fs.readFileSync(templatePath + '/home.hbs')
-    .toString(),
-  feedPage: fs.readFileSync(templatePath + '/feed.hbs')
-    .toString(),
-  sitemapPage: fs.readFileSync(templatePath + '/sitemap.hbs')
-    .toString()
-};
-
-_.each(process.argv.slice(2), function (item) {
-  posts.loadPosts(item, function(err, post) {
+async.map(process.argv.slice(2), function (item, callback) {
+  utils.parsePosts(item, function (err, post) {
     var html = utils.render({
       attrs: post.attributes,
       body: post.compiled,
-      site: metadata
-    }, templates.singlePage);
+      site: config
+    }, config.templates.singlePage);
     var outputDir = path.join('build', post.path);
     mkdirp(outputDir, function (err) {
       if (err) {
@@ -46,6 +28,10 @@ _.each(process.argv.slice(2), function (item) {
         }
       });
     });
-
+    callback(null);
   });
+}, function (err, res) {
+  if (err) {
+    console.error(err);
+  }
 });

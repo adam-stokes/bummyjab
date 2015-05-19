@@ -1,6 +1,7 @@
 #!/usr/bin/zsh
 
 LESSC=./node_modules/less/bin/lessc
+HBAR=./node_modules/handlebars/bin/handlebars
 lessItems=(src/styles/*.less)
 cssItems=(bower_components/bootstrap/*/*/bootstrap.min.css bower_components/bootstrap/*/*/bootstrap-theme.min.css src/styles/main.css)
 jsItems=(bower_components/jquery/*/jquery.min.js bower_components/bootstrap/*/*/bootstrap.min.js)
