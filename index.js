@@ -1,15 +1,17 @@
 var _ = require('lodash');
+var path = require('path');
 var fs = require('fs');
 var async = require('async');
 var handlebars = require('handlebars');
 var moment = require('moment');
 var metadata = require('./config');
-var posts = require('./posts');
+var posts = require('./lib/posts');
 var mkdirp = require('mkdirp');
+var appRoot = require('app-root-path');
 
 var partials = ['header', 'footer', 'sidebar'];
 _.each(partials, function (partial) {
-  handlebars.registerPartial(partial, fs.readFileSync(__dirname + '/templates/partials/' + partial + '.hbs')
+  handlebars.registerPartial(partial, fs.readFileSync(appRoot + '/templates/partials/' + partial + '.hbs')
     .toString());
 });
 
