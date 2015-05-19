@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "browser-sync start --files \"build/*, build/**/*\" --server build"
+    "start": "browser-sync start --files \"build/*, build/**/*\" --server build",
+    "build-less": "lessc src/styles/*.less --clean-css src/styles/main.css",
+    "build-css": "npm run build-less && cat bower_components/bootstrap/*/*/bootstrap.min.css bower_components/bootstrap/*/*/bootstrap-theme.min.css src/styles/main.css > build/styles/main.min.css",
+    "build-js": "cat bower_components/*/dist/jquery.js bower_components/*/dist/js/bootstrap.js > build/js/main.min.js",
+    "copy-static": "rsync -a src/fonts/* build/fonts/. & rsync -a src/images/* build/images/. &",
+    "build": "npm run build-css & npm run build-js& npm run copy-static&",
+    "precompile": "mkdir -p build/styles build/js build/fonts build/images",
+    "compile": "npm run build && node index.js"
   },
   "repository": {
     "type": "git",
@@ -19,20 +26,17 @@
   "homepage": "https://github.com/battlemidget/bummyjab#readme",
   "devDependencies": {
     "async": "^0.9.0",
+    "catw": "^1.0.0",
     "clone": "^1.0.2",
     "fastmatter": "^1.0.0",
     "file": "^0.2.2",
-    "gulp": "^3.8.11",
-    "gulp-concat": "^2.5.2",
-    "gulp-less": "^3.0.3",
-    "gulp-minify-css": "^1.1.1",
-    "gulp-uglify": "^1.2.0",
     "handlebars": "^3.0.3",
     "highlight.js": "^8.5.0",
     "is": "^3.0.1",
     "lodash": "^3.8.0",
     "marked": "^0.3.3",
     "mkdirp": "^0.5.0",
-    "moment": "^2.10.2"
+    "moment": "^2.10.2",
+    "uglifyjs": "^2.4.10"
   }
 }
