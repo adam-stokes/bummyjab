@@ -4,8 +4,7 @@ status: publish
 published: true
 title: Configuring imap with mutt
 author: Adam Stokes
-date: '2005-07-25 00:00:59 -0400'
-date_gmt: '2005-07-25 00:00:59 -0400'
+date: '2005-07-25T00:00:59Z'
 categories:
 - What's New
 tags: [mutt, email]

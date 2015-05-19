@@ -12,36 +12,32 @@ async.map(process.argv.slice(2), function (item, callback) {
     callback(null, res);
   });
 }, function (err, posts) {
-  var mapPosts = {
-    allPosts: _.sortByOrder(posts, ['attributes.date'], [false]),
-    filtered: _.filter(this.allPosts, function (item) {
-      return _.includes(item.attributes.tags, 'ubuntu');
-    })
-  };
-
+  var allPosts= _.sortByOrder(posts, ['attributes.date'], [false]);
   var postData = [{
     html: utils.render({
-      posts: mapPosts.allPosts,
+      posts: allPosts,
       site: config
     }, config.templates.indexPage),
     page: 'index.html'
   }, {
     html: utils.render({
-      posts: mapPosts.allPosts,
+      posts: allPosts,
       site: config,
       feed: 'feed.xml'
     }, config.templates.feedPage),
     page: 'feed.xml'
   }, {
     html: utils.render({
-      posts: mapPosts.filtered,
+      posts: _.filter(allPosts, function (item) {
+        return _.includes(item.attributes.tags, 'ubuntu');
+      }),
       site: config,
       feed: 'ubuntu-feed.xml'
     }, config.templates.feedPage),
     page: 'ubuntu-feed.xml'
   }, {
     html: utils.render({
-      posts: mapPosts.allPosts,
+      posts: allPosts,
       site: config,
       feed: 'sitemap.xml'
     }, config.templates.sitemapPage),
