@@ -12,8 +12,11 @@ var utils = require('../lib/utils');
 async.map(process.argv.slice(2), function (item, callback) {
   utils.parsePosts(item, function (err, post) {
     var html = utils.render({
-      attrs: post.attributes,
+      title: post.title,
+      date: post.date,
+      author: post.author,
       body: post.compiled,
+      tags: post.tags,
       site: config
     }, config.templates.singlePage);
     var outputDir = path.join('build', post.path);

@@ -1,12 +1,13 @@
+{{> sidebar}}
 {{> header }}
 <div class="col-md-9">
   <article class="entry post">
     <header class="post__header">
       <div class="page-header">
-        <h1>{{ attrs.title }}</h1>
+        <h1>{{ title }}</h1>
         <small>Published on
-          <date class="date">{{date attrs.date }}</date>
-          | tags: {{attrs.tags}}
+          <date class="date">{{date date }}</date>
+          | by: {{author}} | tags: {{tags}}
         </small>
       </div>
     </header>
@@ -28,4 +29,3 @@
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
-{{> sidebar}}

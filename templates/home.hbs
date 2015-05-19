@@ -1,19 +1,17 @@
 {{> header}}
-<div class="col-md-9">
-  <h1 class="page-header">Adam Stokes</h1>
+<div class="col-md-12">
+  <h1 class="page-header"><img src="{{link 'images/logo.png'}}" class="img-rounded img-responsive center-block"> Adam Stokes</h1>
   {{#each posts}}
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-2">
         <date class="date">
-          {{date this.attributes.date}}
+          {{date this.date}}
         </date>
       </div>
-      <div class="col-md-9">
-        <a href="{{link this.path}}">{{this.attributes.title}}</a>
-        <p><small>{{this.attributes.tags}}</small></p>
+      <div class="col-md-10">
+        <h3><a href="{{link this.path}}">{{this.title}}</a></h3>
+        <p><small>{{this.tags}}</small></p>
       </div>
     </div>
   {{/each}}
 </div>
-
-{{> sidebar}}

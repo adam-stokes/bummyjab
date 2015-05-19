@@ -12,7 +12,7 @@ async.map(process.argv.slice(2), function (item, callback) {
     callback(null, res);
   });
 }, function (err, posts) {
-  var allPosts= _.sortByOrder(posts, ['attributes.date'], [false]);
+  var allPosts= _.sortByOrder(posts, ['date'], [false]);
   var postData = [{
     html: utils.render({
       posts: allPosts,
@@ -29,7 +29,7 @@ async.map(process.argv.slice(2), function (item, callback) {
   }, {
     html: utils.render({
       posts: _.filter(allPosts, function (item) {
-        return _.includes(item.attributes.tags, 'ubuntu');
+        return _.includes(item.tags, 'ubuntu');
       }),
       site: config,
       feed: 'ubuntu-feed.xml'
