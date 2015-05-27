@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Containerize juju's local provider
-date: 2014-08-11 19:05 EDT
+date: 2014-08-11T11:05Z
 featured: juju.png
 tags: ubuntu, openstack
 ---

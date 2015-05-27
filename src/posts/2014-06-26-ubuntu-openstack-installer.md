@@ -2,7 +2,7 @@
 template: single.hbs
 title: Ubuntu Openstack Installer
 author: Adam Stokes
-date: 2014-06-26 20:40 EDT
+date: 2014-06-26T12:40Z
 featured: openstack.png
 tags: openstack, ubuntu
 ---

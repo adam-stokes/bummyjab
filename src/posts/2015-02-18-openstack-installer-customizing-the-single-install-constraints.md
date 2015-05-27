@@ -1,6 +1,6 @@
 ---
 title: 'Customizing the Single Install constraints'
-date: 2015-02-18 11:42 EDT
+date: 2015-02-18T03:42Z
 featured: openstack.png
 tags: ubuntu, openstack, juju
 template: single.hbs

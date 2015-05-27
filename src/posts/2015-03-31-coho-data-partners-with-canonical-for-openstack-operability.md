@@ -1,6 +1,6 @@
 ---
 title: Coho Data partners with Canonical for OpenStack Operability
-date: 2015-03-31 13:16 EDT
+date: 2015-03-31T05:16Z
 tags: [openstack, cloud]
 ---
 

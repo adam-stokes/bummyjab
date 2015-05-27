@@ -1,6 +1,6 @@
 ---
 title: LDS 15.01.1 with AutoPilot VMWare image
-date: 2015-04-14 21:37 EDT
+date: 2015-04-14T01:37Z
 tags: [ubuntu, landscape]
 template: single.hbs
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: sosreport (SoS) version 3.2 released
-date: 2014-09-30 13:55 EDT
+date: 2014-09-30T05:55Z
 featured: sosreport.png
 tags: ubuntu
 ---

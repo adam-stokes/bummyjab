@@ -1,6 +1,6 @@
 ---
 title: Extending Juju, Plugin basics in Go
-date: 2015-04-22T22:52Z
+date: 2015-04-22T02:52Z
 featured: juju.png
 tags: [ubuntu, juju]
 template: single.hbs
