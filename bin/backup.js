@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // backup posts to json
-
+require('cache-require-paths');
 var appRoot = require('app-root-path');
 var _ = require('lodash');
 var async = require('async');

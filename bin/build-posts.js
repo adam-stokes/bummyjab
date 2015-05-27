@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('cache-require-paths');
 
 var appRoot = require('app-root-path');
 var _ = require('lodash');

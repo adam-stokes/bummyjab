@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('cache-require-paths');
 
 var _ = require('lodash');
 var fs = require('graceful-fs');
