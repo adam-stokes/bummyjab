@@ -15,6 +15,36 @@ markdown.setOptions({
   }
 });
 
+var templates = {
+  singlePage: fs.readFileSync(appRoot + '/templates/single.hbs')
+    .toString(),
+  indexPage: fs.readFileSync(appRoot + '/templates/home.hbs')
+    .toString(),
+  feedPage: fs.readFileSync(appRoot + '/templates/feed.hbs')
+    .toString(),
+  sitemapPage: fs.readFileSync(appRoot + '/templates/sitemap.hbs')
+    .toString()
+};
+
+var node_env = process.env.NODE_ENV || 'development';
+
+var config = {
+    'development': {
+        'sitename': 'Adam Stokes',
+        'title': 'steven seagal says hai.',
+        'baseUrl': 'http://localhost:3000',
+        'description': 'ir0n fists',
+        templates: templates
+    },
+    'production': {
+        'sitename': 'Adam Stokes',
+        'title': 'steven seagal says hai.',
+        'baseUrl': 'http://astokes.org',
+        'description': 'ir0n fists',
+        templates: templates
+    }
+};
+
 var partials = ['header', 'footer', 'sidebar'];
 _.each(partials, function (partial) {
   handlebars.registerPartial(partial, fs.readFileSync(appRoot + '/templates/partials/' + partial + '.hbs')
@@ -37,25 +67,7 @@ handlebars.registerHelper('sitemapdate', function (date) {
 });
 
 handlebars.registerHelper('link', function (path) {
-  return config.baseUrl + '/' + path;
+  return config[node_env].baseUrl + '/' + path;
 });
 
-
-var templates = {
-  singlePage: fs.readFileSync(appRoot + '/templates/single.hbs')
-    .toString(),
-  indexPage: fs.readFileSync(appRoot + '/templates/home.hbs')
-    .toString(),
-  feedPage: fs.readFileSync(appRoot + '/templates/feed.hbs')
-    .toString(),
-  sitemapPage: fs.readFileSync(appRoot + '/templates/sitemap.hbs')
-    .toString()
-};
-
-module.exports = config = {
-  'sitename': 'Adam Stokes',
-  'title': 'steven seagal says hai.',
-  'baseUrl': 'http://astokes.org',
-  'description': 'ir0n fists',
-  templates: templates
-};
+module.exports = config[node_env];
