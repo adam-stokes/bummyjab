@@ -2,7 +2,7 @@
 
 ./bin/build-assets.zsh
 
-posts=(src/posts/*.md)
+posts=($HOME/Dropbox/Articles/*.md)
 echo "compiling blog"
-node ./bin/build-posts $posts &
+node ./bin/build-posts $posts
 node ./bin/build-index $posts
