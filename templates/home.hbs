@@ -4,10 +4,10 @@
   {{#each posts}}
     <div class="row">
       <div class="col-md-12">
+        <h2><a href="{{link this.path}}">{{this.title}}</a> <small>tags: {{this.tags}}</small></h2>
         <date class="date">
           {{date this.date}}
         </date>
-        <h2><a href="{{link this.path}}">{{this.title}}</a> <small>tags: {{this.tags}}</small></h2>
       </div>
     </div>
   {{/each}}
