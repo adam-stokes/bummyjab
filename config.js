@@ -9,10 +9,16 @@ var markdown = require('marked');
 var hljs = require('highlight.js');
 
 markdown.setOptions({
-  highlight: function (code) {
-    return hljs.highlightAuto(code)
-      .value;
-  }
+    highlight: function (code) {
+        return hljs.highlightAuto(code)
+            .value;
+    }
+});
+
+var partials = ['header', 'footer', 'sidebar'];
+_.forEach(partials, function (partial) {
+  handlebars.registerPartial(partial, fs.readFileSync(appRoot + '/templates/partials/' + partial + '.hbs')
+    .toString());
 });
 
 var templates = {
@@ -45,11 +51,6 @@ var config = {
     }
 };
 
-var partials = ['header', 'footer', 'sidebar'];
-_.each(partials, function (partial) {
-  handlebars.registerPartial(partial, fs.readFileSync(appRoot + '/templates/partials/' + partial + '.hbs')
-    .toString());
-});
 
 handlebars.registerHelper('date', function (date) {
   return moment(date)
