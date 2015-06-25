@@ -1,3 +1,4 @@
+#!/usr/bin/env coffee
 require 'cache-require-paths'
 _ = require('lodash')
 fs = require('graceful-fs')

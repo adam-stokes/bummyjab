@@ -1,3 +1,4 @@
+#!/usr/bin/env coffee
 require 'cache-require-paths'
 appRoot = require('app-root-path')
 _ = require('lodash')

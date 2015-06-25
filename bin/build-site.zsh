@@ -4,5 +4,5 @@
 
 posts=($HOME/Dropbox/Articles/*.md)
 echo "compiling blog"
-node ./bin/build-posts $posts
-node ./bin/build-index $posts
+coffee ./bin/build-posts $posts
+coffee ./bin/build-index $posts
