@@ -1,105 +1,74 @@
+Promise = require('bluebird')
+
+mkdirp = Promise.promisify(require('mkdirp'))
+rm = Promise.promisify(require('rimraf'))
+fs = Promise.promisifyAll(require('graceful-fs'))
+
 _ = require('lodash')
-fs = require('graceful-fs')
 path = require('path')
-async = require('async')
-mkdirp = require('mkdirp')
-utils = require('./utils')
 handlebars = require('handlebars')
-markdown = require('marked')
-fm = require('fastmatter')
-moment = require('moment')
-Bummyjab =
-  init: (config, files) ->
-    @files = files
-    @config = config
-    @parsed_files = []
-    return
-  render: (ctx, template) ->
+
+# Internal
+Post = require('./post')
+
+Array::empty = ->
+  @.length == 0
+
+class Bummyjab
+  constructor: (@config, @files) ->
+
+  render: (post, template) ->
     tpl = handlebars.compile(template)
-    tpl ctx
-  parsePosts: (post, callback) ->
-    self = this
-    fs.readFile post, (err, data) ->
+    tpl post
+
+  queue: ->
+    parsed_files = []
+    for item in @files
+      tmpPost = new Post(item)
+      parsed_files.push tmpPost
+    return parsed_files
+
+  generate: ->
+    console.log "Generating site for #{@config.opts().sitename}"
+    rm('build')
+    .then(-> return mkdirp('build'))
+    .catch((e) -> throw new Error(e))
+
+  feeds: ->
+    console.log "Rendering feeds ..."
+    allPosts = _.sortByOrder(@queue(), [ 'date' ], [ false ])
+    categorized_feed = []
+    index_feed = []
+    for post in allPosts
+      if post.hasCategory('ubuntu')
+        categorized_feed.push post
+      else
+        index_feed.push post
+
+    if not categorized_feed.empty()
+      console.log "Writing Ubuntu feed"
+      fs.writeFileSync(path.join('build', 'ubuntu-feed.xml'), @render(categorized_feed, @config.templates.feedPage))
+
+    if not index_feed.empty()
+      console.log "Writing index and sitemap feeds"
+      fs.writeFileSync(path.join('build', 'feed.xml'), @render(index_feed, @config.templates.feedPage))
+      fs.writeFileSync(path.join('build', 'sitemap.xml'), @render(index_feed, @config.templates.sitemapPage))
+      fs.writeFileSync(path.join('build', 'index.html'), @render(index_feed, @config.templates.indexPage))
+
+  singles: ->
+    allPosts = _.sortByOrder(@queue(), [ 'date' ], [ false ])
+    for post in allPosts
+      html = @render(post, @config.templates.singlePage)
+      outputDir = path.join('build', post.permalink)
+      @writePost(html, outputDir)
+
+  writePost: (html, outputDir) ->
+    savePath = path.join(outputDir, 'index.html')
+    mkdirp outputDir, (err) ->
       if err
         throw err
-      matter = fm(data.toString())
-      matter.date = moment(matter.attributes.date).format('YYYY-MM-DDTHH:mm:ss')
-      matter.title = matter.attributes.title
-      matter.tags = matter.attributes.tags
-      matter.author = 'Adam Stokes'
-      matter.path = utils.stringify(post)
-      matter.compiled = markdown(matter.body)
-      matter.site = self.config
-      delete matter.attributes
-      self.parsed_files.push matter
-      return
-    return
-  setup: (dest) ->
-    self = this
-    mkdirp dest
-    _.forEach self.files, (item) ->
-      self.parsePosts item
-      return
-    return
-  renderSingle: (post) ->
-    self = this
-    html = self.render(post, self.config.templates.singlePage)
-    outputDir = path.join('build', post.path)
-    mkdirp outputDir
-    fs.writeFile path.join(outputDir, 'index.html'), html, (err) ->
-      if err
-        throw err
-      return
-    return
-  build: ->
-    self = this
-    console.log 'Building site...'
-    _.forEach self.parsed_files, (item) ->
-      self.renderSingle item
-      return
-    self.renderFeeds()
-    self.renderFeed 'ubuntu'
-    return
-  renderFeeds: ->
-    self = this
-    allPosts = _.sortByOrder(self.parsed_files, [ 'date' ], [ false ])
-    pageLists = [
-      {
-        feed: 'feed.xml'
-        tpl: self.config.templates.feedPage
-      }
-      {
-        feed: 'sitemap.xml'
-        tpl: self.config.templates.sitemapPage
-      }
-      {
-        feed: 'index.html'
-        tpl: self.config.templates.indexPage
-      }
-    ]
-    _.forEach pageLists, (page) ->
-      data = self.render({
-        posts: allPosts
-        site: self.config
-      }, page.tpl)
-      fs.writeFile path.join('build', page.feed), data, (err) ->
-        if err
-          throw err
-        return
-      return
-    return
-  renderFeed: (category) ->
-    self = this
-    allPosts = _.sortByOrder(self.parsed_files, [ 'date' ], [ false ])
-    data = self.render({
-      posts: _.filter(allPosts, (item) ->
-        _.includes item.tags, category
-      )
-      site: self.config
-    }, self.config.templates.feedPage)
-    fs.writeFile path.join('build', category + '-feed.xml'), data, (err) ->
-      if err
-        throw err
-      return
-    return
+      else
+        console.log "Writing #{savePath}"
+        fs.writeFileSync(savePath, html)
+
 module.exports = Bummyjab

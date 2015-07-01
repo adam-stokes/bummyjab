@@ -5,16 +5,18 @@ UGLIFY=./node_modules/.bin/uglifyjs
 lessItems=(src/styles/*.less)
 cssItems=(
     bower_components/bootswatch/paper/bootstrap.min.css
+    bower_components/highlightjs/styles/monokai.css
     build/styles/main.css)
 jsItems=(
     bower_components/jquery/dist/jquery.js
     bower_components/bootstrap/dist/js/bootstrap.js
     bower_components/flowtype/flowtype.js
+    bower_components/highlightjs/highlight.pack.js
     src/js/main.js
 )
 
 echo "Prepping build/"
-rm -rf build && mkdir -p build/{styles,js,fonts,images}
+mkdir -p build/{styles,js,fonts,images}
 
 echo "Compiling css"
 $LESSC $lessItems --clean-css build/styles/main.css

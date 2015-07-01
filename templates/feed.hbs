@@ -7,13 +7,13 @@
 
             <atom:link href="{{ site.baseUrl}}/{{feed}}" rel="self" type="application/rss+xml" />
 
-            {{#each posts}}
+            {{#each this}}
                 <item>
                     <title>{{ this.title }}</title>
                     <description>{{ this.compiled }}</description>
                     <pubDate>{{xmldate this.date }}</pubDate>
-                    <link>{{link this.path }}</link>
-                    <guid isPermaLink="true">{{link this.path }}</guid>
+                    <link>{{link this.permalink }}</link>
+                    <guid isPermaLink="true">{{link this.permalink }}</guid>
                 </item>
             {{/each}}
     </channel>

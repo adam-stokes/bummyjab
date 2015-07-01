@@ -5,15 +5,15 @@
   <article class="entry post">
     <header class="post__header">
       <div class="page-header">
-        <h1>{{ title }}</h1>
+        <h1>{{ this.title }}</h1>
         <small>Published on
-          <date class="date">{{date date }}</date>
-          | by: {{author}} | tags: {{tags}}
+          <date class="date">{{date this.date }}</date>
+          | by: {{this.author}} | tags: {{this.tags}}
         </small>
       </div>
     </header>
     <div class="entry-content">
-      {{{ body }}}
+      {{{ this.html }}}
     </div>
   </article>
   <div id="disqus_thread"></div>

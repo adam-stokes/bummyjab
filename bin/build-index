@@ -5,7 +5,7 @@ fs = require('graceful-fs')
 path = require('path')
 async = require('async')
 config = require('../config')
-utils = require('../lib/utils')
+utils = require('../utils')
 async.map process.argv.slice(2), ((item, callback) ->
   utils.parsePosts item, (err, res) ->
     callback null, res
