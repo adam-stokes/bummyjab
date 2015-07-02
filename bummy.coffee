@@ -42,8 +42,7 @@ class Bummyjab
     for post in allPosts
       if post.hasCategory('ubuntu')
         categorized_feed.push post
-      else
-        index_feed.push post
+      index_feed.push post
 
     if not categorized_feed.empty()
       console.log "Writing Ubuntu feed"
